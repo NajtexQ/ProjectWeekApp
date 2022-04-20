@@ -1,22 +1,28 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { RegisterDto } from './register.dto';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
+import { Request } from 'express';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('user')
 export class UserController {
 
     constructor(
         private readonly userService: UserService,
-    ) {}
+        private readonly jwtService: JwtService,
+    ) { }
 
     @Get('profile')
-    profile(): string {
-        return 'Timotej Kompare';
+    async profile(@Req() req: Request) {
+
+        const cookie = req.cookies['token'];
+        const data = await this.jwtService.verifyAsync(cookie);
+        
     }
 
     @Post('create')
-    async create(@Body() data: RegisterDto){
+    async create(@Body() data: RegisterDto) {
         if (data.password !== data.passwordConfirm) {
             throw new BadRequestException('Passwords do not match');
         }
@@ -35,17 +41,17 @@ export class UserController {
     }
 
     @Get(':id')
-    find(@Param('id') id: number){
+    find(@Param('id') id: number) {
         return this.userService.findOne(id);
     }
 
     @Delete(':id')
-    delete(@Param('id') id: number){
+    delete(@Param('id') id: number) {
         return this.userService.delete(id);
     }
 
     @Put(':id')
-    async update(@Param('id') id: number, @Body() data){
+    async update(@Param('id') id: number, @Body() data) {
         return await this.userService.update(id, data);
     }
 }
