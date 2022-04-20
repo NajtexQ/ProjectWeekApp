@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { RegisterDto } from './register.dto';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
@@ -44,7 +44,7 @@ export class UserController {
         return this.userService.delete(id);
     }
 
-    @Post(':id')
+    @Put(':id')
     async update(@Param('id') id: number, @Body() data){
         return await this.userService.update(id, data);
     }

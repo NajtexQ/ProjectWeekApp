@@ -19,7 +19,11 @@ export class UserService {
     }
 
     findOne(id: number): Promise<User> {
-        return this.userRepository.findOne(id);
+        return this.userRepository.findOne({id});
+    }
+
+    findOneByEmail(email: string): Promise<User> {
+        return this.userRepository.findOne({email});
     }
 
     delete(id: number){
