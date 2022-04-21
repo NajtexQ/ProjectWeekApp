@@ -1,5 +1,6 @@
 import React, { SyntheticEvent, useState } from "react";
 import ReactDOM from "react-dom";
+import axios from "axios";
 
 import "./Register.css";
 
@@ -13,7 +14,7 @@ export default function Register() {
 
     const currentYear = new Date().getFullYear();
 
-    const submit = (e: SyntheticEvent) => {
+    const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
         const data = {
@@ -24,6 +25,10 @@ export default function Register() {
             passwordConfirm
         };
         console.log(data);
+
+        const res = await axios.post("http://localhost:3000/auth/register", data);
+
+        console.log(res);
     }
 
     return (
