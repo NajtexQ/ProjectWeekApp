@@ -1,0 +1,9 @@
+/*Create a css class for nav bar*/
+.navbar {
+  background-color: #333;
+}
+
+.navbar-nav {
+    margin-right: auto;
+    margin-left: auto;
+}

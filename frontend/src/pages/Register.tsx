@@ -1,5 +1,4 @@
 import React, { SyntheticEvent, useState } from "react";
-import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -41,7 +40,7 @@ export default function Register() {
         console.log(res);
 
         if (res.status === 201) {
-            const loginRes = await axios.post(URL + "/auth/login", loginData, { withCredentials: true });
+            await axios.post(URL + "/auth/login", loginData, { withCredentials: true });
             navigation({
                 pathname: "/"
             })

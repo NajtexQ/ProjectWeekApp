@@ -1,9 +1,25 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import PostCard from "./PostCard";
 
+import { URL } from "../constants";
+
 export default function Posts() {
+
+    const [posts, setPosts] = useState<any[]>([]);
+
+    useEffect(() => {
+        axios.get(URL + "/post/all", { withCredentials: true })
+            .then(res => {
+                setPosts(res.data);
+                console.log(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }, []);
+
     return (
         <main>
 
@@ -12,11 +28,23 @@ export default function Posts() {
 
                     <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
-                        <PostCard
-                            title="My first tweet!"
-                            content="Heheheheheheh"
-                        />
-                        
+                        {
+                            posts.map((post) => {
+                                return (
+                                    <PostCard
+                                        key={post.id ? post.id : 0}
+                                        title={post.title ? post.title : ""}
+                                        content={post.content ? post.content : ""}
+                                        image={post.image ? post.image : ""}
+                                        firstName={post.user.firstName ? post.user.firstName : ""}
+                                        lastName={post.user.lastName ? post.user.lastName : ""}
+                                        createdAt={post.createdAt ? post.createdAt : ""}
+                                    />
+                                )
+                            }
+                            )
+                        }
+
                     </div>
                 </div>
             </div>

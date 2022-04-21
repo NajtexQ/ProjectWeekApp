@@ -18,3 +18,10 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
+
+.postcard-timestamp {
+  font-size: 0.75rem;
+  color: #999;
+  margin-bottom: 0.5rem;
+  text-align: right;
+}

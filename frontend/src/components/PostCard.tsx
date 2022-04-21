@@ -1,15 +1,26 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { useState, useEffect } from "react";
+
+import "../App.css";
+
+import { URL } from "../constants";
 
 
-export default function PostCard({title, content}: {title: string; content: string}) {
+export default function PostCard({title, content, image, firstName, lastName, createdAt}: {title: string; content: string; image: string, firstName: string; lastName: string; createdAt: Date}) {
 
     const MAX_LENGTH = 100;
+
+    const [dateString, setDateString] = useState("");
+
+    useEffect(() => {
+        const date = new Date(createdAt);
+        setDateString(date.toLocaleDateString());
+    }, []);
 
     return (
         <div className="col">
             <div className="card shadow-sm">
-                <svg className="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+                <img src={URL + "/post/image/" + image} className="card-img-top" alt="..." />
 
                 <div className="card-body">
                     <p className="postcard-title">{title}</p>
@@ -25,7 +36,11 @@ export default function PostCard({title, content}: {title: string; content: stri
                             <button type="button" className="btn btn-sm btn-outline-secondary">View</button>
                             <button type="button" className="btn btn-sm btn-outline-secondary">Edit</button>
                         </div>
-                        <small className="text-muted">9 mins</small>
+                        <small className="postcard-timestamp">
+                            {firstName + " " + lastName}
+                            <br />
+                            {dateString}
+                        </small>
                     </div>
                 </div>
             </div>

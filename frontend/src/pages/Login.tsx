@@ -1,5 +1,4 @@
 import React, { SyntheticEvent, useState } from "react";
-import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
