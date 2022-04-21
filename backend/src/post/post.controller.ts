@@ -87,7 +87,6 @@ export class PostController {
             @Req() req: Request
         ) {
 
-        
         const cookie = req.cookies['token'];
         const user = await this.jwtService.verifyAsync(cookie);
 
