@@ -1,6 +1,9 @@
 import React, { SyntheticEvent, useState } from "react";
 import ReactDOM from "react-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
+import { URL } from "../constants";
 
 import "./Register.css";
 
@@ -11,6 +14,8 @@ export default function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
+
+    const navigation = useNavigate();
 
     const currentYear = new Date().getFullYear();
 
@@ -26,9 +31,21 @@ export default function Register() {
         };
         console.log(data);
 
-        const res = await axios.post("http://localhost:3000/auth/register", data);
+        const loginData = {
+            email,
+            password
+        };
+
+        const res = await axios.post(URL + "/auth/register", data);
 
         console.log(res);
+
+        if (res.status === 201) {
+            const loginRes = await axios.post(URL + "/auth/login", loginData, { withCredentials: true });
+            navigation({
+                pathname: "/"
+            })
+        }
     }
 
     return (
@@ -52,7 +69,7 @@ export default function Register() {
                     <input type="email" className="form-control" id="email" placeholder="Email"
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    <label htmlFor="email">Last name</label>
+                    <label htmlFor="email">Email</label>
                 </div>
                 <div className="form-floating">
                     <input type="password" className="form-control" id="password" placeholder="Password"
