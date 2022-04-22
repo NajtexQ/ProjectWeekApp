@@ -8,6 +8,16 @@ import { URL } from "../constants";
 export default function Posts() {
 
     const [posts, setPosts] = useState<any[]>([]);
+    const [user, setUser] = useState<any>(null);
+
+    const getUser = async () => {
+        const res = await axios.get(URL + "/user/profile", { withCredentials: true })
+
+        if (res.status === 200) {
+            setUser(res.data);
+            console.log(res.data);
+        }
+    }
 
     useEffect(() => {
         axios.get(URL + "/post/all", { withCredentials: true })
@@ -25,6 +35,8 @@ export default function Posts() {
             .catch(err => {
                 console.log(err);
             });
+
+        getUser();
     }, []);
 
     if (posts.length >=0) {
@@ -39,6 +51,12 @@ export default function Posts() {
 
                             {
                                 posts.map((post) => {
+                                    let owner = false;
+                                    if (user) {
+                                        if (user && user.id == post.user.id) {
+                                            owner = true;
+                                        }
+                                    }
                                     return (
                                         <PostCard
                                             key={post.id}
@@ -49,6 +67,7 @@ export default function Posts() {
                                             firstName={post.user.firstName ? post.user.firstName : ""}
                                             lastName={post.user.lastName ? post.user.lastName : ""}
                                             createdAt={post.createdAt ? post.createdAt : ""}
+                                            owner={owner}
                                         />
                                     )
                                 }
