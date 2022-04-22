@@ -9,7 +9,7 @@ export class UpdatePostDto {
 
     @IsOptional()
     @IsString()
-    @MaxLength(500)
+    @MaxLength(1500)
     content?: string;
 
 }

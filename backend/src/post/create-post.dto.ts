@@ -8,7 +8,7 @@ export class CreatePostDto {
     title?: string;
 
     @IsString()
-    @MaxLength(500)
+    @MaxLength(1500)
     content: string;
 
 }

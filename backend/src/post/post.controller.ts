@@ -32,20 +32,27 @@ export class PostController {
     constructor(
         private readonly postService: PostService,
         private readonly jwtService: JwtService,
-    ) { }
+    ) {}
+
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('file', { storage }))
+    async upload(@UploadedFile() file) {
+        return file;
+    }
 
     @Post('create')
-    @UseInterceptors(FileInterceptor('image', {
-        storage: storage,
-    }))
-    async create(@Body() data: CreatePostDto, @Req() req: Request, @UploadedFile() file) {
+    @UseInterceptors(FileInterceptor('image', { storage }))
+   
+    async create(@UploadedFile() file, @Body() data: CreatePostDto, @Req() req: Request) {
 
         const cookie = req.cookies['token'];
         const user = await this.jwtService.verifyAsync(cookie);
 
         // Save file as png or jpg
-        if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpeg') {
-            throw new BadRequestException('Only .png or .jpg files are allowed');
+        if (file.mimetype != 'undefined') {
+            if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpeg') {
+                throw new BadRequestException('Only .png or .jpg files are allowed');
+            }
         }
 
         return this.postService.create({
@@ -53,8 +60,8 @@ export class PostController {
             user: {
                 id: user.id,
             },
-            image: file.filename,
-            imageOriginalName: file.originalname,
+            image: file ? file.filename : "",
+            imageOriginalName: file ? file.originalname : "",
         });
 
     }

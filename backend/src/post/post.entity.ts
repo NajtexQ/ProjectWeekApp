@@ -22,7 +22,4 @@ export class Post {
     @ManyToOne(() => User, user => user.posts, {eager: true})
     @JoinColumn({ name: 'userId' })
     user: User;
-
-    @Column()
-    image: string;
 }
