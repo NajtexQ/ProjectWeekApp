@@ -1,10 +1,25 @@
 import React from 'react';
+import axios from 'axios';
+
+import { URL } from '../constants';
 
 import './Nav.css';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Nav() {
+
+    const navigation = useNavigate();
+
+    const Logout = async () => {
+        const res = await axios.post(URL + "/auth/logout", {}, { withCredentials: true });
+
+        if (res.status === 201) {
+            navigation({
+                pathname: "/login"
+            })
+        }
+    }
 
     return (
         <header>
@@ -30,6 +45,9 @@ export default function Nav() {
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/register">Register</Link>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" onClick={Logout} >Logout</a>
                         </li>
                     </ul>
                 </div>

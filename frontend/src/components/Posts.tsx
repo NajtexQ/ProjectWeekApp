@@ -12,7 +12,14 @@ export default function Posts() {
     useEffect(() => {
         axios.get(URL + "/post/all", { withCredentials: true })
             .then(res => {
-                setPosts(res.data);
+
+                if (res.data.length > 0) {
+                    setPosts(res.data);
+                }
+
+                else {
+                    setPosts([]);
+                }
                 console.log(res.data);
             })
             .catch(err => {
@@ -20,35 +27,41 @@ export default function Posts() {
             });
     }, []);
 
-    return (
-        <main>
+    if (posts.length >=0) {
 
-            <div className="album py-5 bg-light">
-                <div className="container">
+        return (
+            <main>
 
-                    <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div className="album py-5 bg-light">
+                    <div className="container">
 
-                        {
-                            posts.map((post) => {
-                                return (
-                                    <PostCard
-                                        key={post.id ? post.id : 0}
-                                        title={post.title ? post.title : ""}
-                                        content={post.content ? post.content : ""}
-                                        image={post.image ? post.image : ""}
-                                        firstName={post.user.firstName ? post.user.firstName : ""}
-                                        lastName={post.user.lastName ? post.user.lastName : ""}
-                                        createdAt={post.createdAt ? post.createdAt : ""}
-                                    />
+                        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+                            {
+                                posts.map((post) => {
+                                    return (
+                                        <PostCard
+                                            key={post.id}
+                                            id={post.id ? post.id : 0}
+                                            title={post.title ? post.title : ""}
+                                            content={post.content ? post.content : ""}
+                                            image={post.image ? post.image : ""}
+                                            firstName={post.user.firstName ? post.user.firstName : ""}
+                                            lastName={post.user.lastName ? post.user.lastName : ""}
+                                            createdAt={post.createdAt ? post.createdAt : ""}
+                                        />
+                                    )
+                                }
                                 )
                             }
-                            )
-                        }
 
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </main>
-    )
+            </main>
+        )
+    }
+
+    return (<></>)
 }

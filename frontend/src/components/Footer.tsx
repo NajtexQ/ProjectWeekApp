@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+import "../App.css";
 
 export default function Footer() {
+
+    const [year, setYear] = useState("");
+
+    // Get current year
+    const currentYear = new Date().getFullYear()
+
+    useEffect(() => {
+        setYear(currentYear.toString())
+    }, [currentYear]);
+
     return (
         <footer className="text-muted py-5">
-            <div className="container">
-                <p className="float-end mb-1">
-                    <a href="/">Back to top</a>
-                </p>
-                <p className="mb-1">Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-                <p className="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a href="/docs/5.1/getting-started/introduction/">getting started guide</a>.</p>
+            <div className="container footer">
+                <p className="footer-copyright">&copy; Copyright {year}</p>
+                <p className="footer-author">Made with <span role="img" aria-label="heart">❤️</span> by Najtex</p>
             </div>
         </footer>
     )
