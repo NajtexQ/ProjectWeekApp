@@ -12,6 +12,8 @@ import { diskStorage } from 'multer';
 import { Response } from 'express';
 import * as mime from 'mime';
 import * as crypto from 'crypto';
+import path, { resolve } from 'path';
+import fs, { existsSync } from 'fs';
 
 var storage = diskStorage({
     destination: function (req, file, cb) {
@@ -39,7 +41,7 @@ export class PostController {
     async upload(@UploadedFile() file) {
         return file;
     }
-
+    
     @Post('create')
     @UseInterceptors(FileInterceptor('image', { storage }))
    
@@ -49,7 +51,7 @@ export class PostController {
         const user = await this.jwtService.verifyAsync(cookie);
 
         // Save file as png or jpg
-        if (file.mimetype != 'undefined') {
+        if (file) {
             if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpeg') {
                 throw new BadRequestException('Only .png or .jpg files are allowed');
             }
@@ -73,7 +75,13 @@ export class PostController {
 
     @Get('image/:image')
     async getImage(@Param('image') image: string, @Res() res: Response) {
-        return res.sendFile(image, { root: './files' });
+        
+        // check if image exist in folder
+        if (existsSync(`./files/${image}`)) {
+            res.sendFile(resolve(`./files/${image}`));
+        } else {
+            res.sendFile(resolve(`./files/no-image.png`));
+        }
     }
 
     @Get(':id')

@@ -1,6 +1,8 @@
 import React, { SyntheticEvent, useState } from "react";
 import axios from "axios";
 
+import { URL } from "../constants";
+
 import "./Register.css";
 
 export default function PostCreate() {
