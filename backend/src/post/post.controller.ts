@@ -13,7 +13,7 @@ import { Response } from 'express';
 import * as mime from 'mime';
 import * as crypto from 'crypto';
 import path, { resolve } from 'path';
-import fs, { existsSync } from 'fs';
+import { existsSync, unlinkSync } from 'fs';
 
 var storage = diskStorage({
     destination: function (req, file, cb) {
@@ -34,17 +34,11 @@ export class PostController {
     constructor(
         private readonly postService: PostService,
         private readonly jwtService: JwtService,
-    ) {}
+    ) { }
 
-    @Post('upload')
-    @UseInterceptors(FileInterceptor('file', { storage }))
-    async upload(@UploadedFile() file) {
-        return file;
-    }
-    
     @Post('create')
     @UseInterceptors(FileInterceptor('image', { storage }))
-   
+
     async create(@UploadedFile() file, @Body() data: CreatePostDto, @Req() req: Request) {
 
         const cookie = req.cookies['token'];
@@ -62,7 +56,7 @@ export class PostController {
             user: {
                 id: user.id,
             },
-            image: file ? file.filename : "",
+            image: file ? file.filename : "no-image.png",
             imageOriginalName: file ? file.originalname : "",
         });
 
@@ -75,7 +69,7 @@ export class PostController {
 
     @Get('image/:image')
     async getImage(@Param('image') image: string, @Res() res: Response) {
-        
+
         // check if image exist in folder
         if (existsSync(`./files/${image}`)) {
             res.sendFile(resolve(`./files/${image}`));
@@ -90,8 +84,26 @@ export class PostController {
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: number) {
-        return this.postService.delete(id);
+    async delete(@Param('id') id: number, @Req() req: Request) {
+
+        // Check if user is allowed to delete post
+        const cookie = req.cookies['token'];
+        const data = await this.jwtService.verifyAsync(cookie);
+
+        const post = await this.postService.findOne(id);
+
+        if (post.user.id !== data.id) {
+            throw new UnauthorizedException('You are not allowed to delete this post');
+        }
+        else {
+            // Delete image from folder
+            if (post.image) {
+                if (post.image !== 'no-image.png') {
+                    unlinkSync(`./files/${post.image}`);
+                }
+            }
+            return this.postService.delete(id);
+        }
     }
 
     @Put(':id')

@@ -23,7 +23,6 @@ export class UserController {
         const data = await this.jwtService.verifyAsync(cookie);
 
         return this.userService.findOne(data.id);
-        
     }
 
     @Post('create')

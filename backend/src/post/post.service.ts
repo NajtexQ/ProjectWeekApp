@@ -21,7 +21,7 @@ export class PostService {
     }
 
     findOne(id: number): Promise<Post> {
-        return this.postRepository.findOne({id});
+        return this.postRepository.findOne(id);
     }
 
     delete(id: number){
