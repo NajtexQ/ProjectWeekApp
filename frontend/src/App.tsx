@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 import Home from './pages/Home';
@@ -12,6 +13,8 @@ import PostUpdate from './pages/PostUpdate';
 
 import Nav from './components/Nav';
 import Footer from './components/Footer';
+
+import { URL } from './constants';
 
 function App() {
 

@@ -4,12 +4,15 @@ import axios from "axios";
 import { URL } from "../constants";
 
 import "./Register.css";
+import { useNavigate } from "react-router-dom";
 
 export default function PostCreate() {
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [image, setImage] = useState("");
+
+    const navigate = useNavigate();
 
     const Submit = async (e:SyntheticEvent) => {
         e.preventDefault();
@@ -19,6 +22,9 @@ export default function PostCreate() {
         }, { withCredentials: true })
             .then(res => {
                 console.log(res);
+                if (res.status === 201) {
+                    navigate("/");
+                }
             })
             .catch(err => {
                 console.log(err);
