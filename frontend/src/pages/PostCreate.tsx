@@ -10,26 +10,35 @@ export default function PostCreate() {
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [image, setImage] = useState("");
+    const [image, setImage] = useState<File>();
 
     const navigate = useNavigate();
 
-    const Submit = async (e:SyntheticEvent) => {
+    const Submit = async (e: SyntheticEvent) => {
         e.preventDefault();
-        await axios.post(URL + "/post/create", {
-            title: title,
-            content: content,
-        }, { withCredentials: true })
-            .then(res => {
-                console.log(res);
-                if (res.status === 201) {
-                    navigate("/");
+
+        const formData = new FormData();
+
+        formData.append("title", title);
+        formData.append("content", content);
+        formData.append("image", image as any);
+
+        const res = await axios.post(
+            URL + "/post/create",
+            formData,
+            {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "multipart/form-data"
                 }
-            })
-            .catch(err => {
-                console.log(err);
             });
+
+        if (res.status === 201) {
+            navigate("/");
+        }
     }
+
+    console.log(title, content, image);
 
     return (
         <main className="form-signin">
@@ -51,7 +60,11 @@ export default function PostCreate() {
                 <input
                     type="file"
                     name="image"
-                    onChange={(e) => setImage(e.target.value)}
+                    onChange={(e) => {
+                        if (e.target.files) {
+                            setImage(e.target.files[0]);
+                        }
+                    }}
                 />
                 <button className="w-100 btn btn-lg btn-primary" type="submit">Create post</button>
             </form>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -18,10 +18,36 @@ import { URL } from './constants';
 
 function App() {
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  function checkLogin() {
+    axios.get(URL + "/user/profile", { withCredentials: true })
+      .then(res => {
+        if (res.status === 200) {
+          setIsLoggedIn(true);
+        }
+        else {
+          setIsLoggedIn(false);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+      console.log("Current log:", isLoggedIn);
+  }
+
+  useEffect(() => {
+
+  }, []);
+
   return (
     <BrowserRouter>
 
-      <Nav />
+      <Nav
+        checkLogin={checkLogin}
+        isLoggedIn={isLoggedIn}
+      />
 
       <Routes>
         <Route path="/" element={<Home />} />
