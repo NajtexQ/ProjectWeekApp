@@ -11,5 +11,4 @@ export class UpdatePostDto {
     @IsString()
     @MaxLength(1500)
     content?: string;
-
 }

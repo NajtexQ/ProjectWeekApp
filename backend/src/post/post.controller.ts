@@ -107,11 +107,13 @@ export class PostController {
     }
 
     @Put(':id')
+    @UseInterceptors(FileInterceptor('image', { storage }))
     async update
         (
             @Param('id') id: number,
             @Body() data: UpdatePostDto,
-            @Req() req: Request
+            @Req() req: Request,
+            @UploadedFile() file,
         ) {
 
         const cookie = req.cookies['token'];
@@ -123,7 +125,24 @@ export class PostController {
             throw new UnauthorizedException('You are not allowed to update this post');
         }
 
-        return this.postService.update(id, data);
+        if (file) {
+            if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpeg') {
+                throw new BadRequestException('Only .png or .jpg files are allowed');
+            }
+            else {
+                // Delete old image
+                if (post.image) {
+                    if (post.image !== 'no-image.png') {
+                        unlinkSync(`./files/${post.image}`);
+                    }
+                }
+            }
+        }
+
+        return this.postService.update(id, {
+            ...data,
+            image: file ? file.filename : post.image,
+        });
     }
 }
 
