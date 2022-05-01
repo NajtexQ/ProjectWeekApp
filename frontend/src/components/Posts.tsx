@@ -24,7 +24,7 @@ export default function Posts() {
             .then(res => {
 
                 if (res.data.length > 0) {
-                    setPosts(res.data);
+                    setPosts(res.data.reverse());
                 }
 
                 else {

@@ -12,23 +12,34 @@ export default function PostUpdate() {
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [image, setImage] = useState("");
+    const [image, setImage] = useState<File>();
 
     let { id } = useParams();
 
-    const Submit = async (e:SyntheticEvent) => {
+    const navigate = useNavigate();
+
+    const Submit = async (e: SyntheticEvent) => {
         e.preventDefault();
-        await axios.put(URL + "/post/"+id, {
-            title: title,
-            content: content,
-        }, { withCredentials: true })
-            .then(res => {
-                console.log(res);
-                navigation("/");
-            })
-            .catch(err => {
-                console.log(err);
+
+        const formData = new FormData();
+
+        formData.append("title", title);
+        formData.append("content", content);
+        formData.append("image", image as any);
+
+        const res = await axios.put(
+            URL + "/post/" + id,
+            formData,
+            {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
             });
+
+        if (res.status === 200) {
+            navigate("/");
+        }
     }
 
     const getPost = async () => {
@@ -75,7 +86,11 @@ export default function PostUpdate() {
                 <input
                     type="file"
                     name="image"
-                    onChange={(e) => setImage(e.target.value)}
+                    onChange={(e) => {
+                        if (e.target.files) {
+                            setImage(e.target.files[0]);
+                        }
+                    }}
                 />
                 <button className="w-100 btn btn-lg btn-primary" type="submit">Update</button>
             </form>
