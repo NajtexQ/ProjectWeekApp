@@ -3,8 +3,10 @@ import axios from "axios";
 
 import { URL } from "../constants";
 
-import "./Register.css";
+import "./PostCreate.css";
 import { useNavigate } from "react-router-dom";
+
+const MAX_CONTENT_LENGTH = 1000;
 
 export default function PostCreate() {
 
@@ -52,10 +54,18 @@ export default function PostCreate() {
                     <label htmlFor="email">Title</label>
                 </div>
                 <div className="form-floating">
-                    <input type="text" className="form-control" id="password" placeholder="Content"
+                    <textarea
+                        className="form-control"
+                        id="content"
+                        placeholder="Content"
+                        maxLength={MAX_CONTENT_LENGTH}
                         onChange={(e) => setContent(e.target.value)}
                     />
-                    <label htmlFor="password">Content</label>
+                    <label htmlFor="content">Content</label>
+                </div>
+                <div id="the-count">
+                    <span id="current">{content.length}</span>
+                    <span id="maximum">/ {MAX_CONTENT_LENGTH}</span>
                 </div>
                 <input
                     type="file"

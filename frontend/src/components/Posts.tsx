@@ -24,7 +24,11 @@ export default function Posts() {
             .then(res => {
 
                 if (res.data.length > 0) {
-                    setPosts(res.data.reverse());
+                    // Sort posts by date
+                    res.data.sort((a: { createdAt: string | number | Date; }, b: { createdAt: string | number | Date; }) => {
+                        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+                    });
+                    setPosts(res.data);
                 }
 
                 else {
@@ -53,7 +57,7 @@ export default function Posts() {
                                 posts.map((post) => {
                                     let owner = false;
                                     if (user) {
-                                        if (user && user.id == post.user.id) {
+                                        if (user && user.id === post.user.id) {
                                             owner = true;
                                         }
                                     }

@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { URL } from "../constants";
@@ -15,8 +15,6 @@ export default function Register() {
     const [passwordConfirm, setPasswordConfirm] = useState("");
 
     const navigation = useNavigate();
-
-    const currentYear = new Date().getFullYear();
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -82,15 +80,8 @@ export default function Register() {
                     />
                     <label htmlFor="confirmPassword">Confirm password</label>
                 </div>
-
-                <div className="checkbox mb-3">
-                    <label>
-                        <input type="checkbox" value="remember-me" />
-                        Remember me
-                    </label>
-                </div>
                 <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-                <p className="mt-5 mb-3 text-muted">&copy; {currentYear}</p>
+                <p className="mt-5 mb-3 text-muted">Already have an account? <Link to="/login">Login</Link></p>
             </form>
         </main>
     )

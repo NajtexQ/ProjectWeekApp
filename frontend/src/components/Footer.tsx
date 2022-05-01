@@ -15,7 +15,7 @@ export default function Footer() {
 
     return (
         <footer className="text-muted py-5">
-            <div className="container footer">
+            <div className="footer">
                 <p className="footer-copyright">&copy; Copyright {year}</p>
                 <p className="footer-author">Made with <span role="img" aria-label="heart">❤️</span> by Najtex</p>
             </div>
