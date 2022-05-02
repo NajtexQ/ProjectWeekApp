@@ -15,7 +15,28 @@ export class LikeService {
         return this.likeRepository.save(data);
     }
 
+    delete(userId, postId){
+        return this.likeRepository.delete({
+            user: {
+                id: userId,
+            },
+            post: {
+                id: postId,
+            },
+        });
+    }
+
     getAll(): Promise<Like[]> {
         return this.likeRepository.find();
+    }
+
+    findAllByPost(postId): Promise<Like[]> {
+        return this.likeRepository.find({
+            where: {
+                post: {
+                    id: postId,
+                },
+            },
+        });
     }
 }

@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Param, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '../auth/auth.guard';
@@ -15,7 +15,7 @@ export class LikeController {
     ) { }
 
     @Post('add/:postId')
-    async create(@Req() req: Request, @Param('postId') postId: number) {
+    async add(@Req() req: Request, @Param('postId') postId: number) {
 
         const cookie = req.cookies['token'];
         const user = await this.jwtService.verifyAsync(cookie);
@@ -28,6 +28,14 @@ export class LikeController {
                 id: postId,
             },
         });
+    }
+
+    @Delete('delete/:postId')
+    async delete(@Req() req: Request, @Param('postId') postId: number) {
+        const cookie = req.cookies['token'];
+        const user = await this.jwtService.verifyAsync(cookie);
+
+        return this.likeService.delete(user.id, postId);
     }
 
     @Get('all')

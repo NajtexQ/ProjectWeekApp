@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Like } from 'src/like/like.entity';
 import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import { CreatePostDto } from './create-post.dto';
@@ -17,7 +18,9 @@ export class PostService {
     }
 
     findAll(): Promise<Post[]> {
-        return this.postRepository.find();
+        return this.postRepository.find({
+            relations: ['likes', 'likes.user'],
+        });
     }
 
     findOne(id: number): Promise<Post> {

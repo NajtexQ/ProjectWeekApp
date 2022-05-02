@@ -5,11 +5,14 @@ import { PostService } from './post.service';
 import { Post } from './post.entity';
 import { CommonModule } from 'src/common/common.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { LikeService } from 'src/like/like.service';
+import { LikeModule } from 'src/like/like.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Post]),
     CommonModule,
+    LikeModule,
     // Save as png or jpg
     MulterModule.register({
       dest: './files',

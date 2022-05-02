@@ -11,6 +11,7 @@ import { LikeService } from './like.service';
     CommonModule
   ],
   controllers: [LikeController],
-  providers: [LikeService]
+  providers: [LikeService],
+  exports: [LikeService]
 })
 export class LikeModule {}

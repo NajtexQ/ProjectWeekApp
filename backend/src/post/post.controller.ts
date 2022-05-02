@@ -14,6 +14,7 @@ import * as mime from 'mime';
 import * as crypto from 'crypto';
 import path, { resolve } from 'path';
 import { existsSync, unlinkSync } from 'fs';
+import { LikeService } from 'src/like/like.service';
 
 var storage = diskStorage({
     destination: function (req, file, cb) {
@@ -33,6 +34,7 @@ export class PostController {
 
     constructor(
         private readonly postService: PostService,
+        private readonly likeService: LikeService,
         private readonly jwtService: JwtService,
     ) { }
 
@@ -80,7 +82,14 @@ export class PostController {
 
     @Get(':id')
     async getOne(@Param('id') id: number) {
-        return this.postService.findOne(id);
+
+        const data = await this.postService.findOne(id);
+        const likes = await this.likeService.findAllByPost(id);
+
+        return {
+            ...data,
+            likes: likes.length,
+        };
     }
 
     @Delete(':id')
@@ -114,7 +123,7 @@ export class PostController {
             @Body() data: UpdatePostDto,
             @Req() req: Request,
             @UploadedFile() file,
-        ) {
+    ) {
 
         const cookie = req.cookies['token'];
         const user = await this.jwtService.verifyAsync(cookie);
