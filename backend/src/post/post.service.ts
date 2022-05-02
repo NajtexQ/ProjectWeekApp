@@ -18,8 +18,10 @@ export class PostService {
     }
 
     findAll(): Promise<Post[]> {
+
+        // Also return array of users who liked the post
         return this.postRepository.find({
-            relations: ['likes', 'likes.user'],
+            relations: ['user', 'likes', 'likes.user'],
         });
     }
 

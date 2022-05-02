@@ -8,11 +8,11 @@ export class Like {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User, user => user.likes, {eager: true})
-    @JoinColumn({ name: 'userId' })
+    @ManyToOne(type => User, user => user.likes)
+    @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @ManyToOne(() => Post, post => post.likes, {eager: true})
-    @JoinColumn({ name: 'postId' })
+    @ManyToOne(type => Post, post => post.likes)
+    @JoinColumn({ name: 'post_id' })
     post: Post;
 }
