@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '../auth/auth.guard';
+import { UserUpdateDto } from './user-update.dto';
 
 @Controller('user')
 export class UserController {
@@ -55,7 +56,35 @@ export class UserController {
     }
 
     @Put(':id')
-    async update(@Param('id') id: number, @Body() data) {
-        return await this.userService.update(id, data);
+    async update(@Param('id') id: number, @Body() data: UserUpdateDto, @Req() req: Request) {
+
+        const cookie = req.cookies['token'];
+        const user = await this.jwtService.verifyAsync(cookie);
+
+        const currentUser = await this.userService.findOne(id);
+
+        if (currentUser.id !== user.id) {
+            throw new BadRequestException('You are not allowed to update this user');
+        }
+
+        // Compare current password with the one in the database
+        const isPasswordCorrect = await bcrypt.compare(data.currentPassword, currentUser.password);
+
+        if (!isPasswordCorrect) {
+            throw new BadRequestException('Current password is incorrect');
+        }
+        
+        if (data.password !== data.passwordConfirm) {
+            throw new BadRequestException('Passwords do not match');
+        }
+
+        const newData = {
+            firstName: data.firstName ? data.firstName : currentUser.firstName,
+            lastName: data.lastName ? data.lastName : currentUser.lastName,
+            email: data.email ? data.email : currentUser.email,
+            password: data.password ? await bcrypt.hash(data.password, 10) : currentUser.password,
+        }
+
+        return this.userService.update(id, newData);
     }
 }
