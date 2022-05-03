@@ -66,7 +66,16 @@ export class PostController {
 
     @Get('all')
     async getAll() {
-        return this.postService.findAll();
+        const allPosts = await this.postService.findAll();
+
+        // TODO: Implement likes count for each post
+
+        return await Promise.all(allPosts.map(async post => {
+            return {
+                ...post,
+                likes: await this.likeService.countLikes(post.id),
+            }
+        }));
     }
 
     @Get('image/:image')

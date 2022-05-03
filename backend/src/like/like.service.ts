@@ -30,6 +30,16 @@ export class LikeService {
         return this.likeRepository.find();
     }
 
+    countLikes(postId): Promise<number> {
+        return this.likeRepository.count({
+            where: {
+                post: {
+                    id: postId,
+                },
+            },
+        });
+    }
+
     findAllByPost(postId): Promise<Like[]> {
         return this.likeRepository.find({
             where: {
