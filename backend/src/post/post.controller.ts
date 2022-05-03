@@ -65,7 +65,11 @@ export class PostController {
     }
 
     @Get('all')
-    async getAll() {
+    async getAll(@Req() req: Request) {
+
+        const cookie = req.cookies['token'];
+        const user = await this.jwtService.verifyAsync(cookie);
+
         const allPosts = await this.postService.findAll();
 
         // TODO: Implement likes count for each post
@@ -74,6 +78,7 @@ export class PostController {
             return {
                 ...post,
                 likes: await this.likeService.countLikes(post.id),
+                likedByUser: await this.likeService.userLikedPost(user.id ,post.id),
             }
         }));
     }
@@ -81,7 +86,7 @@ export class PostController {
     @Get('image/:image')
     async getImage(@Param('image') image: string, @Res() res: Response) {
 
-        // check if image exist in folder
+        // Check if image exist in folder
         if (existsSync(`./files/${image}`)) {
             res.sendFile(resolve(`./files/${image}`));
         } else {

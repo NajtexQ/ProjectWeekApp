@@ -8,7 +8,8 @@ export class CreatePostDto {
     title?: string;
 
     @IsString()
-    @MaxLength(1500)
+    // To mess with people who try to cheat
+    @MaxLength(1050)
     content: string;
 
 }

@@ -49,4 +49,17 @@ export class LikeService {
             },
         });
     }
+
+    userLikedPost(userId, postId): Promise<boolean> {
+        return this.likeRepository.findOne({
+            where: {
+                user: {
+                    id: userId,
+                },
+                post: {
+                    id: postId,
+                },
+            },
+        }).then(like => !!like);
+    }
 }
