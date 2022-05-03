@@ -122,7 +122,11 @@ export class PostController {
             // Delete image from folder
             if (post.image) {
                 if (post.image !== 'no-image.png') {
-                    unlinkSync(`./files/${post.image}`);
+                    try {
+                        unlinkSync(`./files/${post.image}`);
+                    } catch (err) {
+                        console.log(err);
+                    }
                 }
             }
             return this.postService.delete(id);

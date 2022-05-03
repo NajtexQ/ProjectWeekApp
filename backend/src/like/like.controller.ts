@@ -20,6 +20,15 @@ export class LikeController {
         const cookie = req.cookies['token'];
         const user = await this.jwtService.verifyAsync(cookie);
 
+        // Check if user already liked the post
+        const isLiked = await this.likeService.userLikedPost(user.id, postId);
+
+        if (isLiked) {
+            return {
+                message: 'You already liked this post',
+            };
+        }
+
         return this.likeService.add({
             user: {
                 id: user.id,
