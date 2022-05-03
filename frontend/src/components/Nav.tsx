@@ -1,25 +1,21 @@
-import React, { } from 'react';
+import React, { useContext } from 'react';
 import axios from 'axios';
 
 import { URL } from '../constants';
 
-import './Nav.css';
+import '../styles/Nav.css';
 
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function Nav({ checkLogin, isLoggedIn } : { checkLogin: () => void, isLoggedIn: boolean }) {
+import { useGlobalContext } from '../context/GlobalContext';
+
+export default function Nav() {
+
+    const { isLoggedIn, setIsLoggedIn, logout} = useGlobalContext();
+
+    console.log("Current log:", isLoggedIn);
 
     const navigation = useNavigate();
-
-    const Logout = async () => {
-        const res = await axios.post(URL + "/auth/logout", {}, { withCredentials: true });
-
-        if (res.status === 201) {
-            navigation({
-                pathname: "/login"
-            })
-        }
-    }
 
     return (
         <header>
@@ -45,16 +41,15 @@ export default function Nav({ checkLogin, isLoggedIn } : { checkLogin: () => voi
 
                                 <>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/login" onClick={checkLogin}>Login</Link>
+                                        <Link className="nav-link" to="/login">Login</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/register" onClick={checkLogin}>Register</Link>
+                                        <Link className="nav-link" to="/register">Register</Link>
                                     </li>
                                 </> :
                                 <li className="nav-item">
                                     <a className="nav-link" onClick={() => {
-                                        Logout();
-                                        checkLogin();
+                                        logout();
                                     }} >Logout</a>
                                 </li>}
                     </ul>

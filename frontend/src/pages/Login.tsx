@@ -2,13 +2,17 @@ import React, { SyntheticEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import { useGlobalContext } from "../context/GlobalContext";
+
 import { URL } from "../constants";
 
-import "./Register.css";
+import "../styles/Register.css";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const { login } = useGlobalContext();
 
     const navigation = useNavigate();
 
@@ -17,19 +21,10 @@ export default function Login() {
 
         const data = {
             email,
-            password,
+            password
         };
-        console.log(data);
 
-        const res = await axios.post(URL + "/auth/login", data, { withCredentials: true });
-
-        console.log(res);
-
-        if (res.status === 201) {
-            navigation({
-                pathname: "/"
-            })
-        }
+        await login(data);
     }
 
     return (

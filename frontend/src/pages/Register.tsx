@@ -2,9 +2,11 @@ import React, { SyntheticEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import { useGlobalContext } from "../context/GlobalContext";
+
 import { URL } from "../constants";
 
-import "./Register.css";
+import "../styles/Register.css";
 
 export default function Register() {
 
@@ -13,6 +15,8 @@ export default function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
+
+    const { register } = useGlobalContext();
 
     const navigation = useNavigate();
 
@@ -26,23 +30,8 @@ export default function Register() {
             password,
             passwordConfirm
         };
-        console.log(data);
 
-        const loginData = {
-            email,
-            password
-        };
-
-        const res = await axios.post(URL + "/auth/register", data);
-
-        console.log(res);
-
-        if (res.status === 201) {
-            await axios.post(URL + "/auth/login", loginData, { withCredentials: true });
-            navigation({
-                pathname: "/"
-            })
-        }
+        await register(data);
     }
 
     return (

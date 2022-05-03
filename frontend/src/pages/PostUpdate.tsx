@@ -4,7 +4,7 @@ import axios from "axios";
 
 import { URL } from "../constants";
 
-import "./Register.css";
+import "../styles/Register.css";
 
 export default function PostUpdate() {
 

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { } from "react";
 
 import PostCard from "./PostCard";
 
@@ -51,6 +50,8 @@ export default function Posts() {
                                             firstName={post.user.firstName ? post.user.firstName : ""}
                                             lastName={post.user.lastName ? post.user.lastName : ""}
                                             createdAt={post.createdAt ? post.createdAt : ""}
+                                            likes={post.likes ? post.likes : 0}
+                                            likedByMe={post.likedByUser ? post.likedByUser : false}
                                             owner={owner}
                                             reloadPosts={reload}
                                         />

@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './App.css';
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
+import { GlobalContextProvider } from './context/GlobalContext';
 
 
 import Home from './pages/Home';
@@ -18,46 +20,24 @@ import { URL } from './constants';
 
 function App() {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  function checkLogin() {
-    axios.get(URL + "/user/profile", { withCredentials: true })
-      .then(res => {
-        if (res.status === 200) {
-          setIsLoggedIn(true);
-        }
-        else {
-          setIsLoggedIn(false);
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
-      console.log("Current log:", isLoggedIn);
-  }
-
-  useEffect(() => {
-
-  }, []);
-
   return (
     <BrowserRouter>
 
-      <Nav
-        checkLogin={checkLogin}
-        isLoggedIn={isLoggedIn}
-      />
+      <GlobalContextProvider>
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/createpost" element={<PostCreate />} />
-        <Route path="/updatepost/:id" element={<PostUpdate />} />
-      </Routes>
+        <Nav />
 
-      <Footer />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/createpost" element={<PostCreate />} />
+          <Route path="/updatepost/:id" element={<PostUpdate />} />
+        </Routes>
+
+        <Footer />
+
+      </GlobalContextProvider>
 
     </BrowserRouter>
   );

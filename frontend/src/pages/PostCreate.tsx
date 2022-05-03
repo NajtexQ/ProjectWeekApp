@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { URL } from "../constants";
 
-import "./PostCreate.css";
+import "../styles/PostCreate.css";
 import { useNavigate } from "react-router-dom";
 
 const MAX_CONTENT_LENGTH = 1000;
