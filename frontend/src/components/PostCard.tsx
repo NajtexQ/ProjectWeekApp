@@ -9,7 +9,7 @@ import "../App.css";
 import { URL } from "../constants";
 
 
-export default function PostCard({ id, title, content, image, firstName, lastName, createdAt, owner }: { id: number, title: string; content: string; image: string, firstName: string; lastName: string; createdAt: Date, owner: boolean }) {
+export default function PostCard({ id, title, content, image, firstName, lastName, createdAt, owner, reloadPosts }: { id: number, title: string; content: string; image: string, firstName: string; lastName: string; createdAt: Date, owner: boolean, reloadPosts: any }) {
 
     const MAX_LENGTH = 250;
 
@@ -24,6 +24,7 @@ export default function PostCard({ id, title, content, image, firstName, lastNam
         axios.delete(URL + "/post/" + id, { withCredentials: true })
             .then(res => {
                 console.log(res);
+                reloadPosts();
             })
             .catch(err => {
                 console.log(err);
