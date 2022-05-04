@@ -4,7 +4,7 @@ import { IsString, IsEmail, IsNotEmpty, IsNumberString, IsNumber, MinLength, IsO
 export class UserUpdateDto {
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     currentPassword: string;
 
     @IsString()

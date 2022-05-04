@@ -67,15 +67,19 @@ export class UserController {
             throw new BadRequestException('You are not allowed to update this user');
         }
 
-        // Compare current password with the one in the database
-        const isPasswordCorrect = await bcrypt.compare(data.currentPassword, currentUser.password);
+        if (data.password) {
 
-        if (!isPasswordCorrect) {
-            throw new BadRequestException('Current password is incorrect');
-        }
-        
-        if (data.password !== data.passwordConfirm) {
-            throw new BadRequestException('Passwords do not match');
+            // Compare current password with the one in the database
+            const isPasswordCorrect = bcrypt.compare(data.currentPassword, currentUser.password);
+
+            if (!isPasswordCorrect) {
+                throw new BadRequestException('Current password is incorrect');
+            }
+
+            if (data.password !== data.passwordConfirm) {
+                throw new BadRequestException('Passwords do not match');
+            }
+
         }
 
         const newData = {
