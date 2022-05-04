@@ -12,6 +12,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import PostCreate from './pages/PostCreate';
 import PostUpdate from './pages/PostUpdate';
+import Profile from './pages/Profile';
 
 import Nav from './components/Nav';
 import Footer from './components/Footer';
@@ -31,6 +32,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<Profile />} />
           <Route path="/createpost" element={<PostCreate />} />
           <Route path="/updatepost/:id" element={<PostUpdate />} />
         </Routes>

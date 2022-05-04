@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 
 import { URL } from '../constants';
@@ -9,13 +9,17 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useGlobalContext } from '../context/GlobalContext';
 
+import { AiFillCaretDown } from 'react-icons/ai';
+
 export default function Nav() {
 
-    const { isLoggedIn, setIsLoggedIn, logout} = useGlobalContext();
+    const { isLoggedIn, setIsLoggedIn, logout } = useGlobalContext();
 
     console.log("Current log:", isLoggedIn);
 
     const navigation = useNavigate();
+
+    const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
     return (
         <header>
@@ -47,10 +51,20 @@ export default function Nav() {
                                         <Link className="nav-link" to="/register">Register</Link>
                                     </li>
                                 </> :
-                                <li className="nav-item">
+                                <li className="nav-item relative">
                                     <a className="nav-link" onClick={() => {
-                                        logout();
-                                    }} >Logout</a>
+                                        setShowProfileDropdown((prev) => !prev);
+                                    }} >
+                                        Profile 
+                                        <AiFillCaretDown className="icon" />
+                                    </a>
+                                    {showProfileDropdown && <div className="dropdown">
+                                        <div className="dropdown-content">
+                                            <Link to="/profile">Profile</Link>
+                                            <Link to="/settings">Settings</Link>
+                                            <Link to="/logout" onClick={logout}>Logout</Link>
+                                        </div>
+                                    </div>}
                                 </li>}
                     </ul>
                 </div>

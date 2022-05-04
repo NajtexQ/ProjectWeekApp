@@ -7,3 +7,57 @@
     margin-right: auto;
     margin-left: auto;
 }
+
+.nav-item {
+  cursor: pointer;
+}
+
+.nav-item.relative {
+  position: relative;
+}
+
+.nav-item.relative .dropdown {
+  position: absolute;
+  top: 75px;
+  left: -50%;
+  transform: translateX(50%);
+  width: 150px;
+  transform: translateY(-8px);
+  background-color: #fff;
+  color: #000;
+  padding: 1rem;
+  border: 1px solid #ccc;
+}
+
+.nav-item.relative .dropdown .dropdown-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dropdown::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 20px solid #333;
+}
+
+.dropdown-content a {
+  text-decoration: none;
+  color: #000;
+  padding: 0.3rem;
+  border-bottom: 1px dotted #333;
+  text-align: center;
+  transition: background-color 0.3s ease-in-out,
+              color 0.3s ease-in-out;
+}
+
+.dropdown-content a:hover {
+  background-color: #333;
+  color: #fff;
+}
