@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Title() {
+export default function MainTitle() {
     return (
         <section className="py-5 text-center container">
             <div className="row py-lg-5">

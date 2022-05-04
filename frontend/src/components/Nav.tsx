@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 import { URL } from '../constants';
@@ -9,17 +9,21 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useGlobalContext } from '../context/GlobalContext';
 
+import useOuterClick from '../hooks/useOuterClick';
+
 import { AiFillCaretDown } from 'react-icons/ai';
 
 export default function Nav() {
 
     const { isLoggedIn, setIsLoggedIn, logout } = useGlobalContext();
 
-    console.log("Current log:", isLoggedIn);
-
     const navigation = useNavigate();
 
     const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+
+    const innerRef = useOuterClick(() => {
+        setShowProfileDropdown(false);
+    });
 
     return (
         <header>
@@ -39,7 +43,7 @@ export default function Nav() {
                             <Link className="nav-link" to="/">About</Link>
                         </li>
                     </ul>
-                    <ul className="navbar-nav ml-auto">
+                    <ul className="navbar-nav ml-auto" ref={innerRef}>
                         {
                             !isLoggedIn ?
 
@@ -55,14 +59,13 @@ export default function Nav() {
                                     <a className="nav-link" onClick={() => {
                                         setShowProfileDropdown((prev) => !prev);
                                     }} >
-                                        Profile 
+                                        Profile
                                         <AiFillCaretDown className="icon" />
                                     </a>
                                     {showProfileDropdown && <div className="dropdown">
                                         <div className="dropdown-content">
                                             <Link to="/profile">Profile</Link>
-                                            <Link to="/settings">Settings</Link>
-                                            <Link to="/logout" onClick={logout}>Logout</Link>
+                                            <Link to="/login" onClick={logout}>Logout</Link>
                                         </div>
                                     </div>}
                                 </li>}

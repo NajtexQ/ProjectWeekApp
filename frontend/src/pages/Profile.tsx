@@ -5,17 +5,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context/GlobalContext";
 
 import PageTitle from "../components/PageTitle";
+import ProfileData from "../components/ProfileData";
 
 export default function Profile() {
     const { isLoggedIn, setIsLoggedIn, logout } = useGlobalContext();
 
     const navigation = useNavigate();
 
-    const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-
     return (
-        <>
+        <div>
             <PageTitle title="Profile" />
-        </>
+            <ProfileData />
+        </div>
     );
 }

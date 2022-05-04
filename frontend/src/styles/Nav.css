@@ -1,6 +1,6 @@
 /*Create a css class for nav bar*/
 .navbar {
-  background-color: #333;
+  background-color: #212529;
 }
 
 .navbar-nav {
@@ -24,7 +24,7 @@
   width: 150px;
   transform: translateY(-8px);
   background-color: #fff;
-  color: #000;
+  color: #212529;
   padding: 1rem;
   border: 1px solid #ccc;
 }
@@ -44,20 +44,20 @@
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 20px solid #333;
+  border-bottom: 20px solid #212529;
 }
 
 .dropdown-content a {
   text-decoration: none;
   color: #000;
   padding: 0.3rem;
-  border-bottom: 1px dotted #333;
+  border-bottom: 1px dotted #212529;
   text-align: center;
   transition: background-color 0.3s ease-in-out,
               color 0.3s ease-in-out;
 }
 
 .dropdown-content a:hover {
-  background-color: #333;
+  background-color: #212529;
   color: #fff;
 }

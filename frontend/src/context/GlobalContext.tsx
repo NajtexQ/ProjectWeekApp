@@ -6,6 +6,7 @@ import { URL } from "../constants";
 
 interface GlobalContextInterface {
     isLoggedIn: boolean;
+    userData: any;
     setIsLoggedIn: (value: boolean) => void;
     register: (data: any) => void;
     login: (data:any) => void;
@@ -14,6 +15,7 @@ interface GlobalContextInterface {
 
 const Context = createContext<GlobalContextInterface>({
     isLoggedIn: false,
+    userData: {},
     setIsLoggedIn: () => { },
     register: () => { },
     login: () => { },
@@ -26,6 +28,7 @@ const { Provider } = Context
 function GlobalContextProvider({ children }: { children: React.ReactNode }) {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userData, setUserData] = useState({});
 
     const navigation = useNavigate();
 
@@ -34,6 +37,7 @@ function GlobalContextProvider({ children }: { children: React.ReactNode }) {
             .then(res => {
                 if (res.status === 200) {
                     setIsLoggedIn(true);
+                    setUserData(res.data);
                 }
                 else {
                     setIsLoggedIn(false);
@@ -90,10 +94,11 @@ function GlobalContextProvider({ children }: { children: React.ReactNode }) {
 
         useEffect(() => {
             checkLogin();
-        }, []);
+        }, [isLoggedIn]);
 
         const value = {
             isLoggedIn,
+            userData,
             setIsLoggedIn,
             register,
             login,
