@@ -51,8 +51,17 @@ export class UserController {
     }
 
     @Delete(':id')
-    delete(@Param('id') id: number) {
-        return this.userService.delete(id);
+    async delete(@Param('id') id: number, @Req() req: Request) {
+        const cookie = req.cookies['token'];
+        const user = this.jwtService.verify(cookie);
+
+        const currentUser = await this.userService.findOne(id);
+
+        if (user.id !== currentUser.id) {
+            throw new BadRequestException('You can only delete your own account');
+        }
+
+        return await this.userService.delete(id);
     }
 
     @Put(':id')
