@@ -9,9 +9,9 @@ import { Post } from './post.entity';
 @Injectable()
 export class PostService {
     constructor(
-        @InjectRepository (Post)
+        @InjectRepository(Post)
         private readonly postRepository: Repository<Post>,
-    ) {}
+    ) { }
 
     create(data): Promise<Post> {
         return this.postRepository.save(data);
@@ -30,7 +30,19 @@ export class PostService {
         return this.postRepository.findOne(id);
     }
 
-    delete(id: number){
+    findByUser(id: number): Promise<Post[]> {
+        return this.postRepository.find(
+            {
+                where: {
+                    user: {
+                        id,
+                    },
+                },
+            }
+        );
+    }
+
+    delete(id: number) {
         return this.postRepository.delete(id);
     }
 

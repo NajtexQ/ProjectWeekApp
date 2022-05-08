@@ -72,8 +72,6 @@ export class PostController {
 
         const allPosts = await this.postService.findAll();
 
-        // TODO: Implement likes count for each post
-
         return await Promise.all(allPosts.map(async post => {
             return {
                 ...post,
@@ -81,6 +79,15 @@ export class PostController {
                 likedByUser: await this.likeService.userLikedPost(user.id ,post.id),
             }
         }));
+    }
+
+    // Find all by user id
+    @Get('user/:id')
+    async getByUser(@Param('id') id: number, @Req() req: Request) {
+
+        const data = this.postService.findByUser(id);
+
+        return data;
     }
 
     @Get('image/:image')
