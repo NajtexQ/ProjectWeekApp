@@ -13,6 +13,7 @@ import Register from './pages/Register';
 import PostCreate from './pages/PostCreate';
 import PostUpdate from './pages/PostUpdate';
 import Profile from './pages/Profile';
+import Post from './pages/Post';
 
 import Nav from './components/Nav';
 import Footer from './components/Footer';
@@ -35,6 +36,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/createpost" element={<PostCreate />} />
           <Route path="/updatepost/:id" element={<PostUpdate />} />
+          <Route path="/post/:id" element={<Post />} />
         </Routes>
 
         <Footer />
