@@ -90,6 +90,23 @@ export class PostController {
         return data;
     }
 
+    @Get('my')
+    async myPosts(@Req() req: Request) {
+
+        const cookie = req.cookies['token'];
+        const user = await this.jwtService.verifyAsync(cookie);
+
+        const posts = await this.postService.findByUser(user.id);
+
+        return await Promise.all(posts.map(async post => {
+            return {
+                ...post,
+                likes: await this.likeService.countLikes(post.id),
+                likedByUser: await this.likeService.userLikedPost(user.id ,post.id),
+            }
+        }));
+    }
+
     @Get('image/:image')
     async getImage(@Param('image') image: string, @Res() res: Response) {
 
