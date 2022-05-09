@@ -36,9 +36,13 @@ export default function Nav() {
                         <li className="nav-item active">
                             <Link className="nav-link" to="/">Home </Link>
                         </li>
+                        {
+                        isLoggedIn &&
+
                         <li className="nav-item">
-                            <Link className="nav-link" to="/">Posts</Link>
+                            <Link className="nav-link" to="/my-posts">My posts</Link>
                         </li>
+                        }
                         <li className="nav-item">
                             <Link className="nav-link" to="/">About</Link>
                         </li>

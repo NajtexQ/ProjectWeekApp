@@ -14,6 +14,7 @@ import PostCreate from './pages/PostCreate';
 import PostUpdate from './pages/PostUpdate';
 import Profile from './pages/Profile';
 import Post from './pages/Post';
+import MyPosts from './pages/MyPosts';
 
 import Nav from './components/Nav';
 import Footer from './components/Footer';
@@ -37,6 +38,7 @@ function App() {
           <Route path="/createpost" element={<PostCreate />} />
           <Route path="/updatepost/:id" element={<PostUpdate />} />
           <Route path="/post/:id" element={<Post />} />
+          <Route path="/my-posts" element={<MyPosts />} />
         </Routes>
 
         <Footer />

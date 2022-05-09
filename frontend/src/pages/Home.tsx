@@ -1,7 +1,7 @@
 import React from "react";
 
 import MainTitle from '../components/MainTitle';
-import Posts from '../components/Posts';
+import GlobalPosts from '../components/GlobalPosts';
 
 export default function Home() {
     return (
@@ -9,7 +9,7 @@ export default function Home() {
 
             <MainTitle />
 
-            <Posts />
+            <GlobalPosts />
 
         </>
     )

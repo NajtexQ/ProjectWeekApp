@@ -91,7 +91,11 @@ export default function ProfileData() {
                 </div>
             </div>
             <div className="btn-container">
-                <button className="delete-account-btn" onClick={accountDelete}>Delete account</button>
+                <button className="delete-account-btn" onClick={() => {
+                    if (window.confirm("Are you sure you want to delete your account?")) {
+                        accountDelete();
+                    }
+                }}>Delete account</button>
             </div>
         </div>
     );
