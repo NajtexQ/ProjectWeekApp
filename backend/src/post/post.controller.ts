@@ -24,7 +24,7 @@ var storage = diskStorage({
         crypto.pseudoRandomBytes(16, function (err, raw) {
             cb(null, raw.toString('hex') + Date.now() + '.' + mime.extension(file.mimetype));
         });
-    }
+    },
 });
 
 @UseGuards(AuthGuard)
@@ -39,19 +39,12 @@ export class PostController {
     ) { }
 
     @Post('create')
-    @UseInterceptors(FileInterceptor('image', { storage }))
+    @UseInterceptors(FileInterceptor('image', { storage, limits: { fileSize: 1024 * 1024 * 3 } }))
 
     async create(@UploadedFile() file, @Body() data: CreatePostDto, @Req() req: Request) {
 
         const cookie = req.cookies['token'];
         const user = await this.jwtService.verifyAsync(cookie);
-
-        // Save file as png or jpg
-        if (file) {
-            if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpeg') {
-                throw new BadRequestException('Only .png or .jpg files are allowed');
-            }
-        }
 
         return this.postService.create({
             ...data,
@@ -158,7 +151,7 @@ export class PostController {
     }
 
     @Put(':id')
-    @UseInterceptors(FileInterceptor('image', { storage }))
+    @UseInterceptors(FileInterceptor('image', { storage, limits: { fileSize: 1024 * 1024 * 3 } }))
     async update
         (
             @Param('id') id: number,
@@ -179,6 +172,9 @@ export class PostController {
         if (file) {
             if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpeg') {
                 throw new BadRequestException('Only .png or .jpg files are allowed');
+            }
+            else if (file.size > 2000000) {
+                throw new BadRequestException('File is too large');
             }
             else {
                 // Delete old image

@@ -70,18 +70,18 @@ export default function PostUpdate() {
                 <h1 className="h3 mb-3 fw-normal">Update post!</h1>
 
                 <div className="form-floating">
-                    <input type="text" className="form-control" id="email" placeholder="Title"
+                    <input type="text" className="form-control" id="title" placeholder="Title"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
-                    <label htmlFor="email">Title</label>
+                    <label htmlFor="title">Title</label>
                 </div>
                 <div className="form-floating">
-                    <input type="text" className="form-control" id="password" placeholder="Content"
+                    <input type="text" className="form-control" id="content" placeholder="Content"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                     />
-                    <label htmlFor="password">Content</label>
+                    <label htmlFor="content">Content</label>
                 </div>
                 <input
                     type="file"
