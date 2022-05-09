@@ -16,10 +16,13 @@ export default function Post() {
     const post: any = data;
 
     return (
-        <div>
+        <div className="post-container">
             <PageTitle title={post.title} />
-            <div className="post-container">
+            <div>
                 <img src={URL + "/post/image/" + post.image} className="post-image" alt={post.title} />
+                <div className="post-content">
+                    <p>{post.content}</p>
+                </div>
             </div>
         </div>
     )

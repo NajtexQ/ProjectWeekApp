@@ -84,15 +84,18 @@
 }
 
 .post-container {
-  margin-top: 50px;
-  margin-bottom: 50px;
+  width: 500px;
+  margin: 50px auto;
 }
 
 .post-image {
+  margin-top: 50px;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 30%;
+  width: 100%;
   height: auto;
   max-width: fit-content;
+}
+
+.post-content {
+  margin-top: 50px;
 }

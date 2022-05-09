@@ -61,10 +61,14 @@ export default function PostCard({ id, title, content, image, firstName, lastNam
         <div className="col">
             <div className="card shadow-sm">
 
-                <img src={URL + "/post/image/" + image} className="card-img-top" alt="..." />
+                <Link to={"/post/" + id}>
+                    <img src={URL + "/post/image/" + image} className="card-img-top" alt="..." />
+                </Link>
 
                 <div className="card-body">
-                    <p className="postcard-title">{title}</p>
+                    <Link to={"/post/" + id} style={{ textDecoration: "none", color: "#000" }}>
+                        <p className="postcard-title">{title}</p>
+                    </Link>
 
                     {content.length > MAX_LENGTH
                         ?
