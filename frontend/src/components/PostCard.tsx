@@ -2,11 +2,30 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+import Modal from "@mui/material/Modal"
+
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 
 import "../App.css";
+import "../styles/PostModal.css";
 
 import { URL } from "../constants";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { width } from "@mui/system";
+
+const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '50%',
+    height: '50%',
+    border: 'none',
+    outline: 'none',
+    boxShadow: 'none',
+    backgroundColor: '#fff',
+};
 
 
 export default function PostCard({ id, title, content, image, firstName, lastName, createdAt, likes, likedByMe, owner, reloadPosts }: { id: number, title: string; content: string; image: string, firstName: string; lastName: string; createdAt: Date, likes: number, likedByMe: boolean, owner: boolean, reloadPosts: any }) {
@@ -16,6 +35,7 @@ export default function PostCard({ id, title, content, image, firstName, lastNam
     const [dateString, setDateString] = useState("");
     const [numberOfLikes, setNumberOfLikes] = useState(likes);
     const [isLiked, setIsLiked] = useState(likedByMe);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const date = new Date(createdAt);
@@ -61,14 +81,28 @@ export default function PostCard({ id, title, content, image, firstName, lastNam
         <div className="col">
             <div className="card shadow-sm">
 
+                <Modal
+                    open={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+
+                        <div className="modal-container">
+                        </div>
+
+                    </Box>
+
+                </Modal>
+
                 <Link to={"/post/" + id}>
                     <img src={URL + "/post/image/" + image} className="card-img-top" alt="..." />
                 </Link>
 
                 <div className="card-body">
-                    <Link to={"/post/" + id} style={{ textDecoration: "none", color: "#000" }}>
-                        <p className="postcard-title">{title}</p>
-                    </Link>
+
+                    <p className="postcard-title" onClick={() => setIsModalOpen(true)}>{title}</p>
 
                     {content.length > MAX_LENGTH
                         ?
