@@ -99,16 +99,29 @@ export default function PostCard({ id, title, content, image, firstName, lastNam
 
                                 </div>
                                 <div className="modal-content-container">
-                                    <div className="modal-content">
-                                        <div className="modal-title">
-                                            <p>{title}</p>
+                                    <div>
+                                        <div className="modal-content-box">
+                                            <h2 className="modal-title">{title}</h2>
+                                            <p className="modal-content-text">{content}</p>
                                         </div>
-                                        <div className="modal-content-text">
-                                            <p>{content}</p>
+                                        <div className="modal-footer">
+                                            <div className="modal-footer-left">
+                                                {
+                                                    isLiked
+                                                        ?
+                                                        <AiFillLike className="filled-like" onClick={unlikePost} />
+                                                        :
+                                                        <AiOutlineLike className="empty-like" onClick={likePost} />
+                                                }
+                                                <p className="like-number">{numberOfLikes}</p>
+                                            </div>
+                                            <div className="modal-footer-right">
+                                                <p className="modal-footer-text">{firstName} {lastName}</p>
+                                                <p className="modal-footer-text">{dateString}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </Box>
 

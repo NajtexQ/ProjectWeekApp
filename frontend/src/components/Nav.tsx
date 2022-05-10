@@ -68,7 +68,7 @@ export default function Nav() {
                                     </a>
                                     {showProfileDropdown && <div className="dropdown">
                                         <div className="dropdown-content">
-                                            <Link to="/profile">Profile</Link>
+                                            <Link to="/profile" onClick={() => {setShowProfileDropdown(false)}}>Profile</Link>
                                             <Link to="/login" onClick={logout}>Logout</Link>
                                         </div>
                                     </div>}
