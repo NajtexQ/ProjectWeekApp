@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import Modal from "@mui/material/Modal"
 
-import { AiOutlineLike, AiFillLike } from "react-icons/ai";
+import { AiOutlineLike, AiFillLike, AiOutlineClose } from "react-icons/ai";
 
 import "../App.css";
 import "../styles/PostModal.css";
@@ -19,8 +19,8 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '50%',
-    height: '50%',
+    width: '75%',
+    height: '60%',
     border: 'none',
     outline: 'none',
     boxShadow: 'none',
@@ -87,10 +87,32 @@ export default function PostCard({ id, title, content, image, firstName, lastNam
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                 >
-                    <Box sx={style}>
+                    <Box sx={{ border: 'none', boxShadow: 'none', outline: 'none' }}>
 
-                        <div className="modal-container">
-                        </div>
+                        <Box sx={style}>
+
+                            <div className="modal-container">
+
+                                <div className="modal-image-container">
+
+                                    <img src={URL + "/post/image/" + image} alt="post-image" className="modal-image" />
+
+                                </div>
+                                <div className="modal-content-container">
+                                    <div className="modal-content">
+                                        <div className="modal-title">
+                                            <p>{title}</p>
+                                        </div>
+                                        <div className="modal-content-text">
+                                            <p>{content}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </Box>
+
+                        <AiOutlineClose onClick={() => setIsModalOpen(false)} className="modal-close" />
 
                     </Box>
 
