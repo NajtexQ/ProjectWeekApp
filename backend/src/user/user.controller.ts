@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import * as nodemailer from 'nodemailer';
 import { AuthGuard } from '../auth/auth.guard';
 import { UserUpdateDto } from './user-update.dto';
 
@@ -25,6 +26,63 @@ export class UserController {
 
         return this.userService.findOne(data.id);
     }
+
+    @Post('send-email')
+    async sendEmail(@Body() data: { email: string }) {
+
+        console.log("Sending email to: " + data.email);
+
+        let testAccount = await nodemailer.createTestAccount();
+
+        console.log(testAccount);
+
+        let transporter = nodemailer.createTransport({
+            host: "smtp.ethereal.email",
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: testAccount.user, // generated ethereal user
+                pass: testAccount.pass, // generated ethereal password
+            },
+        });
+
+        console.log("Transporter created");
+
+        let info = await transporter.sendMail({
+            from: '"Fred Foo 👻" <foo@example.com>', // sender address
+            to: "gaming.najt@gmail.com", // list of receivers
+            subject: "Hello ✔", // Subject line
+            text: "Hello world?", // plain text body
+            html: "<b>Hello world?</b>", // html body
+        },
+            (error, info) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log("Email sent: " + info.response);
+                }
+            }
+        );
+
+        console.log("Info: " + info);
+
+        console.log("Preview URL: %s", nodemailer.getTetMessageUrl(info));
+
+        if (info.recipients[0].accepted) {
+            return {
+                message: 'Email sent successfully',
+                status: 'success',
+            };
+        } else {
+            return {
+                message: 'Email not sent',
+                status: 'error',
+            };
+
+        }
+
+    }
+
 
     @Post('create')
     async create(@Body() data: RegisterDto) {
