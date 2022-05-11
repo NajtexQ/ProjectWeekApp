@@ -9,7 +9,7 @@ interface GlobalContextInterface {
     userData: any;
     setIsLoggedIn: (value: boolean) => void;
     register: (data: any) => void;
-    login: (data:any) => void;
+    login: (data: any) => void;
     logout: () => void;
 }
 
@@ -64,7 +64,7 @@ function GlobalContextProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
-    const login = async (data:any) => {
+    const login = async (data: any) => {
 
         console.log(data);
 
@@ -81,37 +81,37 @@ function GlobalContextProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
-        const logout = async () => {
-            const res = await axios.post(URL + "/auth/logout", {}, { withCredentials: true });
+    const logout = async () => {
+        const res = await axios.post(URL + "/auth/logout", {}, { withCredentials: true });
 
-            if (res.status === 201) {
-                navigation({
-                    pathname: "/login"
-                })
-                setIsLoggedIn(false);
-            }
+        if (res.status === 201) {
+            navigation({
+                pathname: "/login"
+            })
+            setIsLoggedIn(false);
         }
-
-        useEffect(() => {
-            checkLogin();
-        }, [isLoggedIn]);
-
-        const value = {
-            isLoggedIn,
-            userData,
-            setIsLoggedIn,
-            register,
-            login,
-            logout
-        };
-
-        return (
-            <Provider value={value}>
-                {children}
-            </Provider>
-        )
     }
 
-    const useGlobalContext = () => useContext(Context)
+    useEffect(() => {
+        checkLogin();
+    }, [isLoggedIn]);
 
-    export { GlobalContextProvider, useGlobalContext }
+    const value = {
+        isLoggedIn,
+        userData,
+        setIsLoggedIn,
+        register,
+        login,
+        logout
+    };
+
+    return (
+        <Provider value={value}>
+            {children}
+        </Provider>
+    )
+}
+
+const useGlobalContext = () => useContext(Context)
+
+export { GlobalContextProvider, useGlobalContext }

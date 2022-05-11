@@ -8,7 +8,7 @@ export class UserService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-    ) {}
+    ) { }
 
     create(data): Promise<User> {
         return this.userRepository.save(data);
@@ -19,14 +19,14 @@ export class UserService {
     }
 
     findOne(id: number): Promise<User> {
-        return this.userRepository.findOne({id});
+        return this.userRepository.findOne({ id });
     }
 
     findOneByEmail(email: string): Promise<User> {
-        return this.userRepository.findOne({email});
+        return this.userRepository.findOne({ email });
     }
 
-    delete(id: number){
+    delete(id: number) {
         return this.userRepository.delete(id);
     }
 

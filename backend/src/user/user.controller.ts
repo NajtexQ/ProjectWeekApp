@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as nodemailer from 'nodemailer';
 import { AuthGuard } from '../auth/auth.guard';
 import { UserUpdateDto } from './user-update.dto';
+import { transporter } from 'src/MailService';
 
 @Controller('user')
 export class UserController {
@@ -32,24 +33,10 @@ export class UserController {
 
         console.log("Sending email to: " + data.email);
 
-        let testAccount = await nodemailer.createTestAccount();
-
-        console.log(testAccount);
-
-        let transporter = nodemailer.createTransport({
-            host: "smtp.ethereal.email",
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-                user: testAccount.user, // generated ethereal user
-                pass: testAccount.pass, // generated ethereal password
-            },
-        });
-
         console.log("Transporter created");
 
         let info = await transporter.sendMail({
-            from: '"Fred Foo 👻" <foo@example.com>', // sender address
+            from: '"The Wall" <no-reply@example.com>', // sender address
             to: "gaming.najt@gmail.com", // list of receivers
             subject: "Hello ✔", // Subject line
             text: "Hello world?", // plain text body
@@ -65,21 +52,6 @@ export class UserController {
         );
 
         console.log("Info: " + info);
-
-        console.log("Preview URL: %s", nodemailer.getTetMessageUrl(info));
-
-        if (info.recipients[0].accepted) {
-            return {
-                message: 'Email sent successfully',
-                status: 'success',
-            };
-        } else {
-            return {
-                message: 'Email not sent',
-                status: 'error',
-            };
-
-        }
 
     }
 
