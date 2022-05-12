@@ -1,11 +1,14 @@
 import * as nodemailer from 'nodemailer';
+// Import the config file
+import { MAIL_HOST, MAIL_USERNAME, MAIL_PASSWORD } from 'src/config';
 
 let transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
+    host: MAIL_HOST,
+    port: 465,
+    secure: true,
     auth: {
-        user: "najtex.net@gmail.com", // generated ethereal user
-        pass: "ggFz4uFwSc6tLhSa", // generated ethereal password
+        user: MAIL_USERNAME,
+        pass: MAIL_PASSWORD,
     },
 });
 

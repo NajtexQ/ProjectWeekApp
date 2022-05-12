@@ -6,11 +6,12 @@ import { CommonModule } from '../common/common.module';
 import { AuthService } from './auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NonUser } from './non-users.entity';
+import { AuthUser } from './auth.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([NonUser]),
+    TypeOrmModule.forFeature([NonUser, AuthUser]),
     UserModule,
     CommonModule
   ],

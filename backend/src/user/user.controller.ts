@@ -36,11 +36,11 @@ export class UserController {
         console.log("Transporter created");
 
         let info = await transporter.sendMail({
-            from: '"The Wall" <no-reply@example.com>', // sender address
-            to: "gaming.najt@gmail.com", // list of receivers
-            subject: "Hello ✔", // Subject line
-            text: "Hello world?", // plain text body
-            html: "<b>Hello world?</b>", // html body
+            from: '"The Wall" <no-reply@technajt.eu>',
+            to: "gaming.najt@gmail.com",
+            subject: "Account verification",
+            text: "Hello, this email is for your verification",
+            html: "Here you can verify your account",
         },
             (error, info) => {
                 if (error) {
@@ -50,9 +50,6 @@ export class UserController {
                 }
             }
         );
-
-        console.log("Info: " + info);
-
     }
 
 
