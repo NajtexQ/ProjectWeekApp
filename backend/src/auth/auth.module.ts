@@ -5,7 +5,7 @@ import { UserModule } from '../user/user.module';
 import { CommonModule } from '../common/common.module';
 import { AuthService } from './auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { NonUser } from './non-users.entity';
+import { NonUser } from '../user/user.entity';
 import { AuthUser } from './auth.entity';
 
 

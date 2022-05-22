@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuthUser } from './auth.entity';
-import { NonUser } from './non-users.entity';
+import { NonUser } from '../user/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -11,9 +11,26 @@ export class AuthService {
         @InjectRepository(AuthUser)
         private readonly authRepository: Repository<AuthUser>,
         @InjectRepository(NonUser)
-        private readonly nonUserRepository: Repository<NonUser>,
+        private readonly userRepository: Repository<NonUser>,
     ) { }
 
-    
+    createAuth(auth): Promise<AuthUser> {
+        return this.authRepository.save(auth);
+    }
 
+    deleteAuth(id) {
+        return this.authRepository.delete(id);
+    }
+
+    createUser(user): Promise<NonUser> {
+        return this.userRepository.save(user);
+    }
+
+    deleteUser(id) {
+        return this.userRepository.delete(id);
+    }
+
+    findOneByEmail(email): Promise<NonUser> {
+        return this.userRepository.findOne({ where: { email } });
+    }
 }

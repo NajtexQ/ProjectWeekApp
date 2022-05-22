@@ -23,3 +23,6 @@ export class User {
     @OneToMany(() => Like, like => like.user)
     likes: Like[];
 }
+
+@Entity('non-users')
+export class NonUser extends User { }

@@ -2,9 +2,11 @@ import { BadRequestException, Body, Controller, NotFoundException, Post, Res } f
 import { LoginDto } from './login.dto';
 import { RegisterDto } from 'src/user/register.dto';
 import { UserService } from '../user/user.service';
+import { AuthService } from './auth.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
+import { v4 as uuidv4 } from 'uuid';
 
 
 @Controller('auth')
@@ -12,6 +14,7 @@ export class AuthController {
 
     constructor(
         private readonly userService: UserService,
+        private readonly authService: AuthService,
         private readonly jwtService: JwtService,
     ) {}
 
@@ -40,16 +43,31 @@ export class AuthController {
 
     @Post('register')
     async register(@Body() data: RegisterDto){
+
         if (data.password !== data.passwordConfirm) {
             throw new BadRequestException('Passwords do not match');
         }
 
+        const userCheck = await this.userService.findOneByEmail(data.email) || await this.authService.findOneByEmail(data.email);
+
+        if (userCheck) {
+            throw new BadRequestException('This email is already in use');
+        }
+
         const hashedPassword = await bcrypt.hash(data.password, 10);
 
-        return this.userService.create({
+        const user = await this.authService.createUser({
             ...data,
             password: hashedPassword,
         });
+
+        this.authService.createAuth({
+            userId: user.id,
+            expires: new Date(Date.now() + 3600 * 1000),
+            uuid: uuidv4(),
+        });
+
+        return user;
     }
 
     @Post('logout')
