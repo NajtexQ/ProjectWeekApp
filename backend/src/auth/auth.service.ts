@@ -22,6 +22,14 @@ export class AuthService {
         return this.authRepository.delete(id);
     }
 
+    async updateAuth(id: number, auth) {
+        return this.authRepository.update(id, auth);
+    }
+
+    async findOneByUuid(uuid): Promise<AuthUser> {
+        return this.authRepository.findOne({ where: { uuid } });
+    }
+
     createUser(user): Promise<NonUser> {
         return this.userRepository.save(user);
     }
@@ -32,5 +40,9 @@ export class AuthService {
 
     findOneByEmail(email): Promise<NonUser> {
         return this.userRepository.findOne({ where: { email } });
+    }
+
+    findOneById(id): Promise<NonUser> {
+        return this.userRepository.findOne({ where: { id } });
     }
 }

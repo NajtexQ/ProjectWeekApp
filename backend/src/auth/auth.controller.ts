@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, NotFoundException, Post, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, NotFoundException, Param, Post, Res } from '@nestjs/common';
 import { LoginDto } from './login.dto';
 import { RegisterDto } from 'src/user/register.dto';
 import { UserService } from '../user/user.service';
@@ -63,7 +63,7 @@ export class AuthController {
 
         this.authService.createAuth({
             userId: user.id,
-            expires: new Date(Date.now() + 3600 * 1000),
+            validUntil: new Date(Date.now() + 3600 * 1000),
             uuid: uuidv4(),
         });
 
@@ -79,5 +79,49 @@ export class AuthController {
             message: 'Logged out',
         }
     }
+
+    @Post('verify:uuid')
+    async verify(@Param('uuid') uuid: string) {
+
+        const userAuth = await this.authService.findOneByUuid(uuid);
+
+        if (!userAuth) {
+            throw new NotFoundException('Verification link not found');
+        }
+
+        if (userAuth.validUntil < new Date()) {
+            throw new BadRequestException('Verification link expired');
+        }
+
+        const user = await this.authService.findOneById(userAuth.userId);
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        this.authService.deleteUser(user.id);
+        this.authService.deleteAuth(userAuth.id);
+
+        return this.userService.create(user);
+    }
+
+    @Post('renew/:uuid')
+    async renew(@Param('uuid') uuid: string) {
+            
+            const userAuth = await this.authService.findOneByUuid(uuid);
+    
+            if (!userAuth) {
+                throw new NotFoundException('Verification link not found');
+            }
+    
+            const user = await this.authService.findOneById(userAuth.userId);
+    
+            const userAuthRenew = this.authService.updateAuth(userAuth.id, {
+                uuid: uuidv4(),
+                expires: new Date(Date.now() + 10 * 60 * 1000),
+            });
+    
+            return user;
+        }
 
 }
