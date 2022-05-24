@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
+import Verification from '../mail_template/verification';
 
 
 @Controller('auth')
@@ -61,11 +62,13 @@ export class AuthController {
             password: hashedPassword,
         });
 
-        this.authService.createAuth({
+        const auth = await this.authService.createAuth({
             userId: user.id,
             validUntil: new Date(Date.now() + 3600 * 1000),
             uuid: uuidv4(),
         });
+
+        await Verification(user.email, auth.uuid);
 
         return user;
     }

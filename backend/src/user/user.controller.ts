@@ -7,7 +7,6 @@ import { JwtService } from '@nestjs/jwt';
 import * as nodemailer from 'nodemailer';
 import { AuthGuard } from '../auth/auth.guard';
 import { UserUpdateDto } from './user-update.dto';
-import { transporter } from 'src/MailService';
 
 @Controller('user')
 export class UserController {
@@ -27,31 +26,6 @@ export class UserController {
 
         return this.userService.findOne(data.id);
     }
-
-    @Post('send-email')
-    async sendEmail(@Body() data: { email: string }) {
-
-        console.log("Sending email to: " + data.email);
-
-        console.log("Transporter created");
-
-        let info = await transporter.sendMail({
-            from: '"The Wall" <no-reply@technajt.eu>',
-            to: "gaming.najt@gmail.com",
-            subject: "Account verification",
-            text: "Hello, this email is for your verification",
-            html: "Here you can verify your account",
-        },
-            (error, info) => {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log("Email sent: " + info.response);
-                }
-            }
-        );
-    }
-
 
     @Post('create')
     async create(@Body() data: RegisterDto) {
