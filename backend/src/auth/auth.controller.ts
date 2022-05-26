@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, NotFoundException, Param, Post, Res } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Get, NotFoundException, Param, Post, Res, UseInterceptors } from '@nestjs/common';
 import { LoginDto } from './login.dto';
 import { RegisterDto } from 'src/user/register.dto';
 import { UserService } from '../user/user.service';
@@ -83,7 +83,9 @@ export class AuthController {
         }
     }
 
-    @Post('verify:uuid')
+
+    @UseInterceptors(ClassSerializerInterceptor)
+    @Get('verify/:uuid')
     async verify(@Param('uuid') uuid: string) {
 
         const userAuth = await this.authService.findOneByUuid(uuid);
@@ -95,20 +97,24 @@ export class AuthController {
         if (userAuth.validUntil < new Date()) {
             throw new BadRequestException('Verification link expired');
         }
-
+        
         const user = await this.authService.findOneById(userAuth.userId);
 
         if (!user) {
             throw new NotFoundException('User not found');
         }
 
-        this.authService.deleteUser(user.id);
+        this.authService.deleteUser(userAuth.userId);
         this.authService.deleteAuth(userAuth.id);
 
-        return this.userService.create(user);
+        return this.userService.create({
+            ...user,
+            id: undefined,
+        });
     }
 
-    @Post('renew/:uuid')
+    @UseInterceptors(ClassSerializerInterceptor)
+    @Get('renew/:uuid')
     async renew(@Param('uuid') uuid: string) {
             
             const userAuth = await this.authService.findOneByUuid(uuid);
@@ -121,7 +127,7 @@ export class AuthController {
     
             const userAuthRenew = this.authService.updateAuth(userAuth.id, {
                 uuid: uuidv4(),
-                expires: new Date(Date.now() + 10 * 60 * 1000),
+                validUntil: new Date(Date.now() + 10 * 60 * 1000),
             });
     
             return user;
