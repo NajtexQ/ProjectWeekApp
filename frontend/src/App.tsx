@@ -20,6 +20,7 @@ import Nav from './components/Nav';
 import Footer from './components/Footer';
 
 import { URL } from './constants';
+import AccountVerification from './pages/AccountVerification';
 
 function App() {
 
@@ -39,6 +40,8 @@ function App() {
           <Route path="/updatepost/:id" element={<PostUpdate />} />
           <Route path="/post/:id" element={<Post />} />
           <Route path="/my-posts" element={<MyPosts />} />
+          <Route path="/verify" element={<AccountVerification />} />
+          <Route path="/verify/:uuid" element={<AccountVerification />} />
         </Routes>
 
         <Footer />
