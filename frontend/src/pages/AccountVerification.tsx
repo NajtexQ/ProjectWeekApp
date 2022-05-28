@@ -8,21 +8,24 @@ import { URL } from "../constants";
 import { useGlobalContext } from "../context/GlobalContext";
 
 
-export default function AccountVerification() {
+export default function AccountVerification({ route }: { route: any }) {
 
     const { isLoggedIn } = useGlobalContext();
 
-    const [isVerified, setIsVerified] = useState(false);
+    const [successfullVerify, setSuccessfullVerify] = useState(false);
 
     const { uuid } = useParams();
 
     const navigate = useNavigate();
 
+
+    const { verifyReq } = route.params;
+
     const verifyAccount = async () => {
 
         axios.get(`${URL}/auth/verify/${uuid}`)
             .then(res => {
-                setIsVerified(true);
+                setSuccessfullVerify(true);
             })
             .catch(err => {
                 console.log(err.message);
@@ -30,16 +33,21 @@ export default function AccountVerification() {
     }
 
     useEffect(() => {
-        if (!isLoggedIn) {
-            {uuid && verifyAccount();}
+        if (isLoggedIn) {
+            navigate("/");
             return;
         }
+
+        if (uuid) {
+            verifyAccount();
+        }
+
+        console.log(verifyReq);
     }, [])
 
     return (
         <div>
-            {isLoggedIn && <SuccessfullVerify />}
-            {!isLoggedIn && uuid && <VerifyRequest />}
+            {successfullVerify ? <SuccessfullVerify /> : <VerifyRequest />}
         </div>
     );
 }
