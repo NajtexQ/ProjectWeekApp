@@ -17,13 +17,13 @@ export class AuthController {
         private readonly userService: UserService,
         private readonly authService: AuthService,
         private readonly jwtService: JwtService,
-    ) {}
+    ) { }
 
     @Post('login')
     async login(
         @Body() data: LoginDto,
-        @Res({passthrough: true}) res: Response,
-        ) {
+        @Res({ passthrough: true }) res: Response,
+    ) {
         const user = await this.userService.findOneByEmail(data.email);
 
         if (!user) {
@@ -38,12 +38,12 @@ export class AuthController {
             id: user.id
         });
 
-        res.cookie('token', jwt, {httpOnly: true});
+        res.cookie('token', jwt, { httpOnly: true });
 
     }
 
     @Post('register')
-    async register(@Body() data: RegisterDto){
+    async register(@Body() data: RegisterDto) {
 
         if (data.password !== data.passwordConfirm) {
             throw new BadRequestException('Passwords do not match');
@@ -74,8 +74,8 @@ export class AuthController {
     }
 
     @Post('logout')
-    async logout(@Res({passthrough: true}) res: Response) {
-        
+    async logout(@Res({ passthrough: true }) res: Response) {
+
         res.clearCookie('token');
 
         return {
@@ -97,7 +97,7 @@ export class AuthController {
         if (userAuth.validUntil < new Date()) {
             throw new BadRequestException('Verification link expired');
         }
-        
+
         const user = await this.authService.findOneById(userAuth.userId);
 
         if (!user) {
@@ -116,19 +116,36 @@ export class AuthController {
     @UseInterceptors(ClassSerializerInterceptor)
     @Get('renew/:uuid')
     async renew(@Param('uuid') uuid: string) {
+
+        const userAuth = await this.authService.findOneByUuid(uuid);
+
+        if (!userAuth) {
+            throw new NotFoundException('Verification link not found');
+        }
+
+        const user = await this.authService.findOneById(userAuth.userId);
+
+        const userAuthRenew = this.authService.updateAuth(userAuth.id, {
+            uuid: uuidv4(),
+            validUntil: new Date(Date.now() + 10 * 60 * 1000),
+        });
+
+        return user;
+    }
+
+
+    @Get('getVerification')
+    async getVerification() {
             
-            const userAuth = await this.authService.findOneByUuid(uuid);
+            const user = await this.authService.findOneById(1);
     
-            if (!userAuth) {
-                throw new NotFoundException('Verification link not found');
-            }
-    
-            const user = await this.authService.findOneById(userAuth.userId);
-    
-            const userAuthRenew = this.authService.updateAuth(userAuth.id, {
-                uuid: uuidv4(),
+            const userAuth = await this.authService.createAuth({
+                userId: user.id,
                 validUntil: new Date(Date.now() + 10 * 60 * 1000),
+                uuid: uuidv4(),
             });
+    
+            await Verification(user.email, userAuth.uuid);
     
             return user;
         }
