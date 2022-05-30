@@ -25,9 +25,14 @@ export class AuthController {
         @Res({ passthrough: true }) res: Response,
     ) {
         const user = await this.userService.findOneByEmail(data.email);
+        const auth = await this.authService.findOneByEmail(data.email);
 
         if (!user) {
             throw new NotFoundException('User not found');
+        }
+
+        if (auth) {
+            throw new BadRequestException('User not verified');
         }
 
         if (!await bcrypt.compare(data.password, user.password)) {
