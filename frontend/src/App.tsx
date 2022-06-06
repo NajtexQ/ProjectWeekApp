@@ -40,8 +40,16 @@ function App() {
           <Route path="/updatepost/:id" element={<PostUpdate />} />
           <Route path="/post/:id" element={<Post />} />
           <Route path="/my-posts" element={<MyPosts />} />
-          <Route path="/verify" element={<AccountVerification />} />
-          <Route path="/verify/:uuid" element={<AccountVerification />} />
+          <Route path="/verify" element={<AccountVerification route={{
+            params: {
+              verifyReq: true
+            }
+          }} />} />
+          <Route path="/verify/:uuid" element={<AccountVerification route={{
+            params: {
+              verifyReq: true
+            }
+          }} />} />
         </Routes>
 
         <Footer />

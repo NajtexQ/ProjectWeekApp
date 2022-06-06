@@ -79,6 +79,9 @@ function GlobalContextProvider({ children }: { children: React.ReactNode }) {
 
             setIsLoggedIn(true);
         }
+        else if (res.status === 401) {
+            navigation("/verify", { state: { verified: false } });
+        }
     }
 
     const logout = async () => {
